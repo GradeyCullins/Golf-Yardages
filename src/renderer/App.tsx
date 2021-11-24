@@ -1,20 +1,27 @@
 import { useState } from 'react';
 // import pauler from '../../assets/jake-paul-trump.jpg';
 import './App.css';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const getRandomInt = (_min: number, _max: number): number => {
+  // console.log(_min, _max);
   const min = Math.ceil(_min);
   const max = Math.floor(_max);
   return Math.floor(Math.random() * (max + 1 - min) + min); // The maximum is exclusive and the minimum is inclusive
 };
 
-const errStyle = {
-  color: '#f6ff23',
-  fontSize: '2rem',
-};
+// const errStyle = {
+//   color: '#f6ff23',
+//   fontSize: '2rem',
+// };
 
 const targetStyle = {
-  fontSize: '4rem',
+  fontSize: '10rem',
+  margin: '0',
+  color: '#00ff3c',
 };
 
 const gridContainerStyle = {
@@ -37,16 +44,42 @@ const Root = () => {
   const [max, setMax] = useState(2);
   const [interval, setInter] = useState(1);
   const [target, setTarget] = useState(getRandomInt(min, max));
-  const [err, setErr] = useState('');
   const [timer, setTimer] = useState(0); // Interval timer for the game loop.
+  const [errMsg, setErrMsg] = useState('');
+
+  const [open, setOpen] = useState(false);
+
+  // onClose?: (event: React.SyntheticEvent<any>, reason: SnackbarCloseReason) => void;
+  const handleClose = () => {
+    // if (reason === 'clickaway') {
+    //   return;
+    // }
+
+    setOpen(false);
+  };
+
+  const action = (
+    <>
+      <Button onClick={handleClose} />
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
 
   const toggleGameState = () => {
     // Start generating numbers if the inputs are valid.
     if (!running) {
       if (min > max) {
         setMin(1);
-        setErr('Min must be less than max');
+        setOpen(true);
         setRunning(false);
+        setErrMsg('Min must be less than max');
         return;
       }
       setRunning(true);
@@ -71,9 +104,8 @@ const Root = () => {
     <div>
       <div className="Hello">
         {/* <img width="300px" alt="icon" src={pauler} /> */}
-        <h1 style={targetStyle}>{target} yards</h1>
-        <h2>Status: {running ? 'running' : 'stopped'}</h2>
-        {err !== '' && <p style={errStyle}>{err}</p>}
+        <p>yards</p>
+        <h1 style={targetStyle}>{running ? target : '-'}</h1>
         <p style={summaryStyle}>
           Generating a random number between {min} and {max} every {interval} seconds.
         </p>
@@ -110,13 +142,21 @@ const Root = () => {
         </div>
 
         {/* Start/stop button. */}
-        <button
+        <Button
           style={toggleButtonStyle}
           onClick={toggleGameState}
-          type="button"
+          variant="contained"
+          color={!running ? 'success' : 'error'}
         >
           {running ? 'Stop' : 'Start'}
-        </button>
+        </Button>
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message={errMsg}
+          action={action}
+        />
       </div>
     </div>
   );
