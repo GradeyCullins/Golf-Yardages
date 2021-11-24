@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import pauler from '../../assets/jake-paul-trump.jpg';
 import './App.css';
 import Button from '@mui/material/Button';
@@ -12,11 +12,6 @@ const getRandomInt = (_min: number, _max: number): number => {
   const max = Math.floor(_max);
   return Math.floor(Math.random() * (max + 1 - min) + min); // The maximum is exclusive and the minimum is inclusive
 };
-
-// const errStyle = {
-//   color: '#f6ff23',
-//   fontSize: '2rem',
-// };
 
 const targetStyle = {
   fontSize: '10rem',
@@ -46,8 +41,11 @@ const Root = () => {
   const [target, setTarget] = useState(getRandomInt(min, max));
   const [timer, setTimer] = useState(0); // Interval timer for the game loop.
   const [errMsg, setErrMsg] = useState('');
-
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setTarget(getRandomInt(min, max));
+  }, [min, max]);
 
   // onClose?: (event: React.SyntheticEvent<any>, reason: SnackbarCloseReason) => void;
   const handleClose = () => {
@@ -104,7 +102,7 @@ const Root = () => {
     <div>
       <div className="Hello">
         {/* <img width="300px" alt="icon" src={pauler} /> */}
-        <p>yards</p>
+        <p>🕳️ &nbsp; yards &nbsp; 🕳️</p>
         <h1 style={targetStyle}>{running ? target : '-'}</h1>
         <p style={summaryStyle}>
           Generating a random number between {min} and {max} every {interval} seconds.
@@ -148,7 +146,7 @@ const Root = () => {
           variant="contained"
           color={!running ? 'success' : 'error'}
         >
-          {running ? 'Stop' : 'Start'}
+          {running ? 'Stop' : 'Start ⛳'}
         </Button>
         <Snackbar
           open={open}
