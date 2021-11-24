@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 // import pauler from '../../assets/jake-paul-trump.jpg';
 import './App.css';
 
@@ -81,19 +80,18 @@ const Root = () => {
 
         <div style={gridContainerStyle}>
           {/* Minimum number input. */}
-          <span className="col-1">Minimum value</span>
+          <span>Min Yards</span>
           <input
             id="minInput"
             type="number"
             min={1}
             max={max - 1}
             value={min}
-            className="col-1"
             onChange={(e) => setMin(parseInt(e.target.value, 10))}
           />
 
           {/* Max number input. */}
-          <span className="col-1">Maximum value</span>
+          <span>Max Yards</span>
           <input
             type="number"
             min={2}
@@ -102,7 +100,7 @@ const Root = () => {
           />
 
           {/* Interval number input. */}
-          <span className="col-1">Timer</span>
+          <span>Timer Length</span>
           <input
             type="number"
             min={1}
@@ -125,11 +123,5 @@ const Root = () => {
 };
 
 export default function App() {
-  return (
-    <Router>
-      <Switch>
-        <Route path="/" component={Root} />
-      </Switch>
-    </Router>
-  );
+  return <Root />;
 }
